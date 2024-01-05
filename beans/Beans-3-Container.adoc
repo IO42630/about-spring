@@ -1,0 +1,131 @@
+= Beans
+:toc:
+:toclevels: 5
+
+=== Spring Container
+
+* ~ IoCC (IoC Container)
+* 📦 manages the lifecycle of ☕s.
+** to instantiate the application class
+** to configure the object
+** assembles the dependencies between the objects (di)
+*** see `Beans-4-Inject.adoc`
+* 2 main container types :
+** `BeanFactory`
+*** provides _DI_ capability
+** `ApplicationContext` `extends` `BeanFactory`, adds :
+*** MessageSource
+*** Access to resources
+*** Event propagation to beans
+*** Loading of multiple (hierarchical) ctx
+* 5 main container impl:
+** `FileSystemXmlApplicationContext`
+** `ClassPathXmlApplicationContext`
+** `AnnotationConfigApplicationContext`
+** `XmlWebApplicationContext`
+** `AnnotationConfigWebApplicationContext`
+
+{empty} +
+
+===== Container Lifecycle
+
+1. 📦 is created.
+1. 📦 reads config data.
+* XML -> `resources/foo.xml`
+* Java ->  `@Configuration`, `@Bean` (programmatic)
+* Annotation -> `@Component`,`@ComponentScan`, `@Autowire` (declarative)
+3. ☕ definitions are created.
+4. `BeanFactoryPostProcessor` updates definitions.
+* there are many `BeanFactoryPostProcessor` can specify order via `@Order`
+5. ☕ are instantiated using definitions.
+6. injections are applied to ☕s.
+7. `BeanPostProcessor` updates ☕
+** if initialization callbacks exist, invoke, and goto 7.
+8. ☕s ready.
+9. Application shut down is initialized.
+10. 📦 is closed.
+11. Destruction callbacks are invoked on the singleton ☕.
+
+{empty} +
+
+===== Bean Scopes
+
+* custom scopes can be created using the `Scope` interface.
+* 🌐 scopes only valid with web-aware app-ctx
+
+[cols="1,4"]
+|===
+| singleton | > one instance per container +
+> **default** scope
+| prototype | new instance each time ☕ is requested
+| 🌐 request | new instance for each HTTP request.
+| 🌐 session | new instance for each HTTP session. imagine shopping-cart.
+| global-session | for portlet apps
+| 🌐 application | lifecycle of a `ServletContext`
+| 🌐 websocket | lifecycle of a `WebSocket`
+|===
+
+====== Singleton
+
+* 🌱 wraps `@Configuration` calsses in proxy, and intercepts calls to `@Bean` methods, and checks if instance exists.
+** thus methods can`t be final.
+
+{empty} +
+
+===== Initialization
+
+* eager (on startup)
+** singleton, portlet(?)
+* lazy (on demand)
+** singleton (@Lazy), all others
+* `@Lazy` can apply to:
+** `@Bean`
+** `@Configuration` (then applies to all `@Bean`)
+** `@Component`
+
+{empty} +
+
+===== Post Processors
+
+* `@BeanFactoryPostProcessor` called:
+** after bean definitions have been loaded
+** before any bean has been initialized
+** allows customizing beans, even eager-initializing ones
+* `@BeanPostProcessor` called:
+** after each bean has been initialized
+** thus
+*** during startup for singleton beans
+*** on demand for prototype beans
+
+{empty} +
+
+==== Shutdown
+
+* standard
+** `appcontext.close()`
+** `appcontext.registerShutdownHook()`
+* web
+** `ContextLoaderListener` impl `ServletContextListener`
+** `ContextLoaderListener` receives `ServletContextEvent` when web container stops the web application
+* same for boot
+
+==== Profiles
+
+=== Configuration
+
+===== @Conditional
+
+* used to selectively load Beans or Configurations
+
+[cols="1,2"]
+|===
+| `@Conditional(FooCondition.class)` | use custom `FooCondition` impl `Condition`
+| `@ConditionalOnClass` | create ☕ if class available on classpath
+| `@ConditionalOnMissingClass` |
+| `@ConditionalOnBean` |
+| `@ConditionalOnMissingBean` | create ☕ if other  ☕ missing
+| `@ConditionalOnProperty` |
+| `@ConditionalOnMissingProperty` |
+| `@ConditionalOnWebApplication` |
+| `@ConditionalOnMissingWebApplication` |
+|===
