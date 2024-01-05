@@ -18,6 +18,7 @@
 	</properties>
 	<modules>
 
+		<module>bom</module>
 	</modules>
 	<dependencies>
 		<dependency>
