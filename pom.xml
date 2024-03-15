@@ -3,28 +3,56 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.olexyn</groupId>
+		<artifactId>min-root</artifactId>
+		<version>jdk17-spring-0.1</version>
+	</parent>
 	<groupId>com.olexyn.about.spring</groupId>
 	<artifactId>about-spring</artifactId>
 	<version>0.1</version>
 	<packaging>pom</packaging>
-	<name>about-spring</name>
-	<url>https://www.olexyn.com</url>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>17</java.version>
-		<project.version>0.1</project.version>
-		<kotlin.version>1.6.10</kotlin.version>
 		<jax.version>2.3.0</jax.version>
 	</properties>
 	<modules>
-
-		<module>bom</module>
+		<module>aop-boot</module>
+		<module>beans-config</module>
+		<module>beans-di</module>
+		<module>boot-jdbc</module>
+		<module>empty</module>
+		<module>empty-boot</module>
+		<module>jpa-persistence</module>
+		<module>jpa-boot</module>
+		<module>logging-boot</module>
+		<module>mvc-controller</module>
+		<module>mvc-controller-boot</module>
+		<module>mvc-session-boot</module>
+		<module>mvc-thymeleaf-boot</module>
+		<module>profiles</module>
+		<module>properties</module>
+		<module>properties-boot</module>
+		<module>security-method-boot</module>
+		<module>security-simple</module>
+		<module>security-simple-boot</module>
+		<module>spel</module>
+		<module>war-boot</module>
 	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.olexyn</groupId>
+				<artifactId>min-bom</artifactId>
+				<version>jdk17-0.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>[4.13,)</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -32,66 +60,16 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.checkerframework</groupId>
+			<artifactId>checker-qual</artifactId>
+			<version>3.42.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.1.0</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.0.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.0</version>
-					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.0.2</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>2.5.2</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.8.2</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.7.1</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>3.0.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.1.2</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>sources</goal>
-								<goal>resolve</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>
